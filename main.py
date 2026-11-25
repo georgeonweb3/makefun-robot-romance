@@ -36,6 +36,13 @@ def main() -> None:
         os.makedirs(directory, exist_ok=True)
     with open(OUTPUT_PATH, "wb") as handle:
         handle.write(LINE.encode("utf-8"))
+    # Read-back verification: the file on disk must hold exactly the
+    # line above, byte for byte, with no trailing newline added.
+    with open(OUTPUT_PATH, "rb") as handle:
+        written = handle.read()
+    assert written == LINE.encode("utf-8"), (
+        f"entry.txt holds {len(written)} bytes, expected {len(LINE.encode('utf-8'))}"
+    )
 
 
 if __name__ == "__main__":
